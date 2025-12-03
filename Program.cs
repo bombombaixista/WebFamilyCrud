@@ -78,12 +78,13 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Swagger
-if (app.Environment.IsDevelopment())
+// ✅ Swagger habilitado sempre (Development e Production)
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebFamilyCrud API v1");
+    c.RoutePrefix = "swagger"; // acessível em /swagger
+});
 
 // Middleware
 app.UseCors("AllowAll");

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro de Clientes e Grupos</title>
+</head>
+<body>
+  <h1>Cadastro de Clientes</h1>
+  <form id="formCliente">
+    <input id="nomeCliente" placeholder="Nome" required />
+    <input id="emailCliente" placeholder="Email" required />
+    <input id="grupoCliente" placeholder="GrupoId" required />
+    <button type="submit">Cadastrar Cliente</button>
+  </form>
+
+  <h2>Lista de Clientes</h2>
+  <ul id="listaClientes"></ul>
+
+  <h1>Cadastro de Grupos</h1>
+  <form id="formGrupo">
+    <input id="nomeGrupo" placeholder="Nome do Grupo" required />
+    <button type="submit">Cadastrar Grupo</button>
+  </form>
+
+  <h2>Lista de Grupos</h2>
+  <ul id="listaGrupos"></ul>
+
+  <script>
+    const api = "http://localhost:7296/api";
+
+    async function carregarClientes() {
+      const res = await fetch(`${api}/clientes`);
+      const data = await res.json();
+      const lista = document.getElementById("listaClientes");
+      lista.innerHTML = "";
+      data.forEach(c => {
+        const li = document.createElement("li");
+        li.textContent = `${c.nome} - ${c.email} (Grupo ${c.grupoId})`;
+        lista.appendChild(li);
+      });
+    }
+
+    async function carregarGrupos() {
+      const res = await fetch(`${api}/grupos`);
+      const data = await res.json();
+      const lista = document.getElementById("listaGrupos");
+      lista.innerHTML = "";
+      data.forEach(g => {
+        const li = document.createElement("li");
+        li.textContent = g.nome;
+        lista.appendChild(li);
+      });
+    }
+
+    document.getElementById("formCliente").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      await fetch(`${api}/clientes`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nome: document.getElementById("nomeCliente").value,
+          email: document.getElementById("emailCliente").value,
+          grupoId: parseInt(document.getElementById("grupoCliente").value)
+        })
+      });
+      carregarClientes();
+    });
+
+    document.getElementById("formGrupo").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      await fetch(`${api}/grupos`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nome: document.getElementById("nomeGrupo").value
+        })
+      });
+      carregarGrupos();
+    });
+
+    // Carregar listas ao abrir
+    carregarClientes();
+    carregarGrupos();
+  </script>
+</body>
+</html>

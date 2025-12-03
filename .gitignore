@@ -1,0 +1,31 @@
+# Build results
+bin/
+obj/
+out/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio
+.vs/
+
+# Logs
+*.log
+
+# Configs locais
+appsettings.Development.json
+appsettings.Local.json
+
+# Secrets
+secrets.json
+
+# Docker
+docker-compose.override.yml
+
+# Backup & temp
+*.bak
+*.tmp
+*.temp
